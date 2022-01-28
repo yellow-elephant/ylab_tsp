@@ -1,11 +1,12 @@
 from math import sqrt
 
-points = [
-    [0, 2],
-    [2, 5],
-    [5, 2],
-    [6, 6],
-    [8, 3]]
+points = {
+    'point1': [0, 2],
+    'point2': [2, 5],
+    'point3': [5, 2],
+    'point4': [6, 6],
+    'point5': [8, 3]}
+start = 'point1'
 
 
 def dist(a, b):
@@ -14,18 +15,12 @@ def dist(a, b):
 
 
 def distances_matrix(points_cords):
-    dm = []
-    i = 0
-    while i < len(points_cords):
-        dm_line = []
-        a = points_cords[i]
-        for b in points_cords:
-            dm_line.append(dist(a, b))
-        dm.append(dm_line)
-        i += 1
+    dm = {}
+    for point1, cords1 in points_cords.items():
+        dm[point1] = {}
+        for point2, cords2 in points_cords.items():
+            dm[point1][point2] = dist(cords1, cords2)
     return dm
 
 
 if __name__ == '__main__':
-    for line in distances_matrix(points):
-        print(line)

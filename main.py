@@ -12,19 +12,33 @@ start = 'point1'
 
 
 def dist(a, b):
-    d = [a[0] - b[0], a[1] - b[1]]
-    return sqrt(d[0] * d[0] + d[1] * d[1])
+    dx = a[0] - b[0]
+    dy = a[1] - b[1]
+    return sqrt(dx * dx + dy * dy)
 
 
 def distances_matrix(points_cords):
-
-    dm = {}
-
+    dm_result = {}
     for point1, cords1 in points_cords.items():
-        dm[point1] = {}
+        dm_result[point1] = {}
         for point2, cords2 in points_cords.items():
-            dm[point1][point2] = dist(cords1, cords2)
-    return dm
+            dm_result[point1][point2] = dist(cords1, cords2)
+    return dm_result
+
+
+def path_length(path_points, dist_matrix, print_results=False):
+    result_length = 0
+    i = 0
+    while i < len(path_points) - 1:
+        point1 = path_points[i]
+        point2 = path_points[i + 1]
+        result_length += dist_matrix[point1][point2]
+        if print_results:
+            print(f"{point1} -> {point2} distance: {dist_matrix[point1][point2]}.")
+        i += 1
+    if print_results:
+        print(f"Total distance: {result_length}.")
+    return result_length
 
 
 if __name__ == '__main__':
@@ -38,17 +52,9 @@ if __name__ == '__main__':
 
     for path in transitional_paths:
         path = (start,) + path + (start,)
-        path_length = 0
-        i = 0
-        while i < len(path) - 1:
-            point1 = path[i]
-            point2 = path[i + 1]
-            path_length += dm[point1][point2]
-            i += 1
-        if min_path_length == 0 or path_length < min_path_length:
-            min_path_length = path_length
+        cur_path_length = path_length(path, dm)
+        if min_path_length == 0 or cur_path_length < min_path_length:
+            min_path_length = cur_path_length
             min_path = path
 
-    print(min_path_length)
-    print(min_path)
-
+    path_length(min_path, dm, print_results=True)
